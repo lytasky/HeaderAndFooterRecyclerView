@@ -6,16 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by cundong on 2015/10/9.
- * <p/>
- * RecyclerView.Adapter with Header and Footer
+ * Created by dongye on 15/11/13.
  */
 public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_HEADER_VIEW = Integer.MIN_VALUE;
-    private static final int TYPE_FOOTER_VIEW = Integer.MIN_VALUE + 1;
+    private static final int TYPE_FOOTER_VIEW = Integer.MIN_VALUE + 100;
 
     /**
      * RecyclerView使用的，真正的Adapter
@@ -115,16 +114,16 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
      * 返回第一个FoView
      * @return
      */
-    public View getFooterView() {
-        return  getFooterViewsCount()>0 ? mFooterViews.get(0) : null;
+    public List<View> getFooterView() {
+        return  getFooterViewsCount()>0 ? mFooterViews : null;
     }
 
     /**
      * 返回第一个HeaderView
      * @return
      */
-    public View getHeaderView() {
-        return  getHeaderViewsCount()>0 ? mHeaderViews.get(0) : null;
+    public List<View> getHeaderView() {
+        return  getHeaderViewsCount()>0 ? mHeaderViews : null;
     }
 
     public void removeHeaderView(View view) {
@@ -146,12 +145,11 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
     public boolean isHeader(int position) {
-        return getHeaderViewsCount() > 0 && position == 0;
+        return getHeaderViewsCount() > 0 && position < getHeaderViewsCount();
     }
 
     public boolean isFooter(int position) {
-        int lastPosition = getItemCount() - 1;
-        return getFooterViewsCount() > 0 && position == lastPosition;
+        return getFooterViewsCount() > 0 && position >= getItemCount() - getFooterViewsCount();
     }
 
     @Override
@@ -208,3 +206,4 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         }
     }
 }
+

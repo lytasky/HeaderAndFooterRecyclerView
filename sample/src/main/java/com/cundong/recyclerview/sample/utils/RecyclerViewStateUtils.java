@@ -48,7 +48,7 @@ public class RecyclerViewStateUtils {
 
         //已经有footerView了
         if (headerAndFooterAdapter.getFooterViewsCount() > 0) {
-            footerView = (LoadingFooter) headerAndFooterAdapter.getFooterView();
+            footerView = (LoadingFooter) headerAndFooterAdapter.getFooterView().get(0);
             footerView.setState(state);
 
             if (state == LoadingFooter.State.NetWorkError) {
@@ -78,7 +78,7 @@ public class RecyclerViewStateUtils {
         RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
         if (outerAdapter != null && outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter) {
             if (((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterViewsCount() > 0) {
-                LoadingFooter footerView = (LoadingFooter) ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterView();
+                LoadingFooter footerView = (LoadingFooter) ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterView().get(0);
                 return footerView.getState();
             }
         }
@@ -96,7 +96,7 @@ public class RecyclerViewStateUtils {
         RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
         if (outerAdapter != null && outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter) {
             if (((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterViewsCount() > 0) {
-                LoadingFooter footerView = (LoadingFooter) ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterView();
+                LoadingFooter footerView = (LoadingFooter) ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterView().get(0);
                 footerView.setState(state);
             }
         }

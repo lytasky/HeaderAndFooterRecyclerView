@@ -3,20 +3,20 @@ package com.cundong.recyclerview;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.util.List;
+
 /**
- * Created by cundong on 2015/10/22.
- * <p/>
- * RecyclerView设置Header/Footer所用到的工具类
+ * Created by dongye on 15/11/13.
  */
 public class RecyclerViewUtils {
 
     /**
-     * 设置HeaderView
+     * 添加HeaderView
      *
      * @param recyclerView
      * @param view
      */
-    public static void setHeaderView(RecyclerView recyclerView, View view) {
+    public static void addHeaderView(RecyclerView recyclerView, View view) {
         RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
 
         if (outerAdapter == null || !(outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter)) {
@@ -24,9 +24,9 @@ public class RecyclerViewUtils {
         }
 
         HeaderAndFooterRecyclerViewAdapter headerAndFooterAdapter = (HeaderAndFooterRecyclerViewAdapter) outerAdapter;
-        if (headerAndFooterAdapter.getHeaderViewsCount() == 0) {
-            headerAndFooterAdapter.addHeaderView(view);
-        }
+//        if (headerAndFooterAdapter.getHeaderViewsCount() == 0) {
+        headerAndFooterAdapter.addHeaderView(view);
+//        }
     }
 
     /**
@@ -35,7 +35,8 @@ public class RecyclerViewUtils {
      * @param recyclerView
      * @param view
      */
-    public static void setFooterView(RecyclerView recyclerView, View view) {
+    public static void addFooterView(RecyclerView recyclerView, View view) {
+
         RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
 
         if (outerAdapter == null || !(outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter)) {
@@ -43,9 +44,7 @@ public class RecyclerViewUtils {
         }
 
         HeaderAndFooterRecyclerViewAdapter headerAndFooterAdapter = (HeaderAndFooterRecyclerViewAdapter) outerAdapter;
-        if (headerAndFooterAdapter.getFooterViewsCount() == 0) {
-            headerAndFooterAdapter.addFooterView(view);
-        }
+        headerAndFooterAdapter.addFooterView(view);
     }
 
     /**
@@ -61,8 +60,10 @@ public class RecyclerViewUtils {
 
             int footerViewCounter = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterViewsCount();
             if (footerViewCounter > 0) {
-                View footerView = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterView();
-                ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).removeFooterView(footerView);
+                List<View> footerView = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterView();
+                for (View view : footerView) {
+                    ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).removeFooterView(view);
+                }
             }
         }
     }
@@ -80,8 +81,10 @@ public class RecyclerViewUtils {
 
             int headerViewCounter = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getHeaderViewsCount();
             if (headerViewCounter > 0) {
-                View headerView = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getHeaderView();
-                ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).removeFooterView(headerView);
+                List<View> headerView = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getHeaderView();
+                for (View view : headerView) {
+                    ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).removeFooterView(view);
+                }
             }
         }
     }
@@ -122,7 +125,7 @@ public class RecyclerViewUtils {
                 return holder.getAdapterPosition() - headerViewCounter;
             }
         }
-
         return holder.getAdapterPosition();
     }
 }
+

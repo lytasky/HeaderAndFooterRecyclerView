@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,7 +76,7 @@ public class EndlessGridLayoutActivity extends AppCompatActivity {
         manager.setSpanSizeLookup(new HeaderSpanSizeLookup((HeaderAndFooterRecyclerViewAdapter) mRecyclerView.getAdapter(), manager.getSpanCount()));
         mRecyclerView.setLayoutManager(manager);
 
-        RecyclerViewUtils.setHeaderView(mRecyclerView, new SampleHeader(this));
+        RecyclerViewUtils.addHeaderView(mRecyclerView, new SampleHeader(this));
 
         mRecyclerView.addOnScrollListener(mOnScrollListener);
     }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cundong.recyclerview.DividerItemDecoration;
 import com.cundong.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import com.cundong.recyclerview.RecyclerViewUtils;
 import com.cundong.recyclerview.sample.weight.SampleFooter;
@@ -52,12 +53,18 @@ public class LinearLayoutActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mHeaderAndFooterRecyclerViewAdapter);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+//                LinearLayoutActivity.this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+                LinearLayoutActivity.this, DividerItemDecoration.VERTICAL_LIST,R.drawable.divider,mHeaderAndFooterRecyclerViewAdapter));
         //add a HeaderView
-        RecyclerViewUtils.setHeaderView(mRecyclerView, new SampleHeader(this));
+        RecyclerViewUtils.addHeaderView(mRecyclerView, new SampleHeader(this));
+        RecyclerViewUtils.addHeaderView(mRecyclerView, new SampleHeader(this));
 
         //add a FooterView
-        RecyclerViewUtils.setFooterView(mRecyclerView, new SampleFooter(this));
+        RecyclerViewUtils.addFooterView(mRecyclerView, new SampleFooter(this));
+
+
     }
 
     private class DataAdapter extends RecyclerView.Adapter {

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cundong.recyclerview.DividerItemDecoration;
 import com.cundong.recyclerview.EndlessRecyclerOnScrollListener;
 import com.cundong.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import com.cundong.recyclerview.RecyclerViewUtils;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
  *
  * 带HeaderView的分页加载LinearLayout RecyclerView
  */
-public class EndlessLinearLayoutActivity extends AppCompatActivity {
+    public class EndlessLinearLayoutActivity extends AppCompatActivity {
 
     /**服务器端一共多少条数据*/
     private static final int TOTAL_COUNTER = 64;
@@ -72,7 +73,14 @@ public class EndlessLinearLayoutActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        RecyclerViewUtils.setHeaderView(mRecyclerView, new SampleHeader(this));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+//                LinearLayoutActivity.this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+                EndlessLinearLayoutActivity.this, DividerItemDecoration.VERTICAL_LIST, R.drawable.divider, mHeaderAndFooterRecyclerViewAdapter));
+        //add a HeaderView
+        RecyclerViewUtils.addHeaderView(mRecyclerView, new SampleHeader(this));
+        RecyclerViewUtils.addHeaderView(mRecyclerView, new SampleHeader(this));
 
         mRecyclerView.addOnScrollListener(mOnScrollListener);
     }
