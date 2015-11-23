@@ -29,7 +29,6 @@ public class LinearLayoutActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView = null;
 
     private DataAdapter mDataAdapter = null;
-    private ArrayList<String> mDataList = null;
 
     private HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter = null;
 
@@ -41,13 +40,13 @@ public class LinearLayoutActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
 
         //init data
-        mDataList = new ArrayList<>();
+        ArrayList<String> dataList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            mDataList.add("item" + i);
+            dataList.add("item" + i);
         }
 
         mDataAdapter = new DataAdapter(this);
-        mDataAdapter.setData(mDataList);
+        mDataAdapter.setData(dataList);
 
         mHeaderAndFooterRecyclerViewAdapter = new HeaderAndFooterRecyclerViewAdapter(mDataAdapter);
         mRecyclerView.setAdapter(mHeaderAndFooterRecyclerViewAdapter);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,7 +46,6 @@ import java.util.ArrayList;
     private RecyclerView mRecyclerView = null;
 
     private DataAdapter mDataAdapter = null;
-    private ArrayList<String> mDataList = null;
 
     private PreviewHandler mHandler = new PreviewHandler(this);
     private HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter = null;
@@ -58,15 +58,20 @@ import java.util.ArrayList;
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
 
         //init data
-        mDataList = new ArrayList<>();
+        ArrayList<ItemModel> dataList = new ArrayList<>();
+
         for (int i = 0; i < 10; i++) {
-            mDataList.add("item" + i);
+
+            ItemModel item = new ItemModel();
+            item.id = i;
+            item.title = "item" + i;
+            dataList.add(item);
         }
 
-        mCurrentCounter = mDataList.size();
+        mCurrentCounter = dataList.size();
 
         mDataAdapter = new DataAdapter(this);
-        mDataAdapter.setData(mDataList);
+        mDataAdapter.addItems(dataList);
 
         mHeaderAndFooterRecyclerViewAdapter = new HeaderAndFooterRecyclerViewAdapter(mDataAdapter);
         mRecyclerView.setAdapter(mHeaderAndFooterRecyclerViewAdapter);
@@ -89,8 +94,10 @@ import java.util.ArrayList;
         mHeaderAndFooterRecyclerViewAdapter.notifyDataSetChanged();
     }
 
-    private void refreshData() {
-        mDataAdapter.setData(mDataList);
+    private void addItems(ArrayList<ItemModel> list) {
+
+        mDataAdapter.addItems(list);
+        mCurrentCounter += list.size();
     }
 
     private EndlessRecyclerOnScrollListener mOnScrollListener = new EndlessRecyclerOnScrollListener() {
@@ -104,8 +111,6 @@ import java.util.ArrayList;
                 Log.d("@Cundong", "the state is Loading, just wait..");
                 return;
             }
-
-            mCurrentCounter = mDataList.size();
 
             if (mCurrentCounter < TOTAL_COUNTER) {
                 // loading more
@@ -135,17 +140,23 @@ import java.util.ArrayList;
 
             switch (msg.what) {
                 case -1:
-                    int currentSize = activity.mDataList.size();
+                    int currentSize = activity.mDataAdapter.getItemCount();
 
-                    //模拟组装数据
+                    //模拟组装10个数据
+                    ArrayList<ItemModel> newList = new ArrayList<>();
                     for (int i = 0; i < 10; i++) {
-                        if(activity.mDataList.size() >= TOTAL_COUNTER) {
+                        if (newList.size() + currentSize >= TOTAL_COUNTER) {
                             break;
                         }
-                        activity.mDataList.add("item" + (currentSize+i));
+
+                        ItemModel item = new ItemModel();
+                        item.id = currentSize + i;
+                        item.title = "item" + (item.id);
+
+                        newList.add(item);
                     }
 
-                    activity.refreshData();
+                    activity.addItems(newList);
                     RecyclerViewStateUtils.setFooterViewState(activity.mRecyclerView, LoadingFooter.State.Normal);
                     break;
                 case -2:
@@ -196,15 +207,75 @@ import java.util.ArrayList;
     private class DataAdapter extends RecyclerView.Adapter {
 
         private LayoutInflater mLayoutInflater;
-        private ArrayList<String> mDataList = new ArrayList<>();
+        private SortedList<ItemModel> mSortedList;
 
         public DataAdapter(Context context) {
             mLayoutInflater = LayoutInflater.from(context);
+            mSortedList = new SortedList<>(ItemModel.class, new SortedList.Callback<ItemModel>() {
+
+                /**
+                 * 返回一个负整数（第一个参数小于第二个）、零（相等）或正整数（第一个参数大于第二个）
+                 */
+                @Override
+                public int compare(ItemModel o1, ItemModel o2) {
+
+                    if (o1.id < o2.id) {
+                        return -1;
+                    } else if (o1.id > o2.id) {
+                        return 1;
+                    }
+
+                    return 0;
+                }
+
+                @Override
+                public boolean areContentsTheSame(ItemModel oldItem, ItemModel newItem) {
+                    return oldItem.title.equals(newItem.title);
+                }
+
+                @Override
+                public boolean areItemsTheSame(ItemModel item1, ItemModel item2) {
+                    return item1.id == item2.id;
+                }
+
+                @Override
+                public void onInserted(int position, int count) {
+                    notifyItemRangeInserted(position, count);
+                }
+
+                @Override
+                public void onRemoved(int position, int count) {
+                    notifyItemRangeRemoved(position, count);
+                }
+
+                @Override
+                public void onMoved(int fromPosition, int toPosition) {
+                    notifyItemMoved(fromPosition, toPosition);
+                }
+
+                @Override
+                public void onChanged(int position, int count) {
+                    notifyItemRangeChanged(position, count);
+                }
+            });
         }
 
-        public void setData(ArrayList<String> list) {
-            this.mDataList = list;
-            notifyDataSetChanged();
+        public void addItems(ArrayList<ItemModel> list) {
+            mSortedList.beginBatchedUpdates();
+
+            for(ItemModel itemModel : list) {
+                mSortedList.add(itemModel);
+            }
+
+            mSortedList.endBatchedUpdates();
+        }
+
+        public void deleteItems(ArrayList<ItemModel> items) {
+            mSortedList.beginBatchedUpdates();
+            for (ItemModel item : items) {
+                mSortedList.remove(item);
+            }
+            mSortedList.endBatchedUpdates();
         }
 
         @Override
@@ -215,15 +286,15 @@ import java.util.ArrayList;
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-            String item = mDataList.get(position);
+            ItemModel item = mSortedList.get(position);
 
             ViewHolder viewHolder = (ViewHolder) holder;
-            viewHolder.textView.setText(item);
+            viewHolder.textView.setText(item.title);
         }
 
         @Override
         public int getItemCount() {
-            return mDataList.size();
+            return mSortedList.size();
         }
 
         private class ViewHolder extends RecyclerView.ViewHolder {
@@ -237,8 +308,8 @@ import java.util.ArrayList;
                 textView.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String text = mDataList.get(RecyclerViewUtils.getAdapterPosition(mRecyclerView, ViewHolder.this));
-                        Toast.makeText(EndlessLinearLayoutActivity.this, text, Toast.LENGTH_SHORT).show();
+                        ItemModel item = mSortedList.get(RecyclerViewUtils.getAdapterPosition(mRecyclerView, ViewHolder.this));
+                        Toast.makeText(EndlessLinearLayoutActivity.this, item.title, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
