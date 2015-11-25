@@ -29,11 +29,12 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mOrientation;
 
-    public DividerItemDecoration(Context context, int orientation) {
+    public DividerItemDecoration(Context context, int orientation, HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
         setOrientation(orientation);
+        this.mHeaderAndFooterRecyclerViewAdapter = mHeaderAndFooterRecyclerViewAdapter;
     }
 
     public DividerItemDecoration(Context context, int orientation, int resId, HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter) {
@@ -94,6 +95,12 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
+            if (mHeaderAndFooterRecyclerViewAdapter.getHeaderView() != null && mHeaderAndFooterRecyclerViewAdapter.getHeaderView().contains(child)) {
+                continue;
+            }
+            if (mHeaderAndFooterRecyclerViewAdapter.getFooterView() != null && mHeaderAndFooterRecyclerViewAdapter.getFooterView().contains(child)) {
+                continue;
+            }
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
             final int left = child.getRight() + params.rightMargin;

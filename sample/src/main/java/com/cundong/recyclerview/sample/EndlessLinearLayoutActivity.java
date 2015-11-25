@@ -79,10 +79,10 @@ import java.util.ArrayList;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(
-//                LinearLayoutActivity.this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(
-                EndlessLinearLayoutActivity.this, DividerItemDecoration.VERTICAL_LIST, R.drawable.divider, mHeaderAndFooterRecyclerViewAdapter));
+                EndlessLinearLayoutActivity.this, DividerItemDecoration.VERTICAL_LIST,mHeaderAndFooterRecyclerViewAdapter));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+//                EndlessLinearLayoutActivity.this, DividerItemDecoration.VERTICAL_LIST, R.drawable.divider, mHeaderAndFooterRecyclerViewAdapter));
         //add a HeaderView
         RecyclerViewUtils.addHeaderView(mRecyclerView, new SampleHeader(this));
         RecyclerViewUtils.addHeaderView(mRecyclerView, new SampleHeader(this));

@@ -110,6 +110,15 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         this.notifyDataSetChanged();
     }
 
+    public void insertFooter(View loadingFooter) {
+        if (loadingFooter == null) {
+            throw new RuntimeException("footer is null");
+        }
+
+        mFooterViews.add(0,loadingFooter);
+        this.notifyDataSetChanged();
+    }
+
     /**
      * 返回第一个FoView
      * @return
