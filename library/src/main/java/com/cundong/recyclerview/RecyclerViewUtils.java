@@ -127,5 +127,23 @@ public class RecyclerViewUtils {
         }
         return holder.getAdapterPosition();
     }
+
+    public static int getHeaderCount(RecyclerView recyclerView) {
+        int headerCount = 0;
+        RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
+        if (outerAdapter != null && outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter) {
+            headerCount = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getHeaderViewsCount();
+        }
+        return headerCount;
+    }
+
+    public static int getFooterCount(RecyclerView recyclerView) {
+        int footerCount = 0;
+        RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
+        if (outerAdapter != null && outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter) {
+            footerCount = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterViewsCount();
+        }
+        return footerCount;
+    }
 }
 
