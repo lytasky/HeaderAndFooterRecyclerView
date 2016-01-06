@@ -36,7 +36,7 @@ dependencies {
 upinfo {
     groupId 'com.mogujie'
     artifactId 'headerAndfooter'
-    version '1.0.3'
+    version '1.0.4'
 }
 
 configurations.all {

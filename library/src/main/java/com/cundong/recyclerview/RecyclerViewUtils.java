@@ -52,16 +52,16 @@ public class RecyclerViewUtils {
      *
      * @param recyclerView
      */
-    public static void removeFooterView(RecyclerView recyclerView) {
+    public static void removeFooterView(RecyclerView recyclerView, View view) {
 
         RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
 
-        if (outerAdapter != null && outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter) {
+        if (view != null && outerAdapter != null && outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter) {
 
             int footerViewCounter = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterViewsCount();
             if (footerViewCounter > 0) {
                 List<View> footerView = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getFooterView();
-                for (View view : footerView) {
+                if (footerView.contains(view)) {
                     ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).removeFooterView(view);
                 }
             }
@@ -73,7 +73,7 @@ public class RecyclerViewUtils {
      *
      * @param recyclerView
      */
-    public static void removeHeaderView(RecyclerView recyclerView) {
+    public static void removeHeaderView(RecyclerView recyclerView, View view) {
 
         RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
 
@@ -82,8 +82,8 @@ public class RecyclerViewUtils {
             int headerViewCounter = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getHeaderViewsCount();
             if (headerViewCounter > 0) {
                 List<View> headerView = ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).getHeaderView();
-                for (View view : headerView) {
-                    ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).removeFooterView(view);
+                if (headerView.contains(view)) {
+                    ((HeaderAndFooterRecyclerViewAdapter) outerAdapter).removeHeaderView(view);
                 }
             }
         }
