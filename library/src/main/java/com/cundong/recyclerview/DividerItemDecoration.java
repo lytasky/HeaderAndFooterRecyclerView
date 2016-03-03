@@ -29,6 +29,8 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mOrientation;
 
+    private int mSpacing = -1;
+
     public DividerItemDecoration(Context context, int orientation, HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
@@ -39,11 +41,21 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     public DividerItemDecoration(Context context, int orientation, int resId, HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mDivider =  context.getResources().getDrawable(resId, context.getTheme());
+            mDivider = context.getResources().getDrawable(resId, context.getTheme());
         } else {
-            mDivider =  context.getResources().getDrawable(resId);
+            mDivider = context.getResources().getDrawable(resId);
         }
-        setOrientation(VERTICAL_LIST);
+        setOrientation(orientation);
+        this.mHeaderAndFooterRecyclerViewAdapter = mHeaderAndFooterRecyclerViewAdapter;
+    }
+
+    //为了避免与上面的构造方法重名 改变啦参数的位置  注意!!!
+    public DividerItemDecoration(Context context, HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter, int orientation, int spacing) {
+        final TypedArray a = context.obtainStyledAttributes(ATTRS);
+        mDivider = a.getDrawable(0);
+        a.recycle();
+        mSpacing = spacing;
+        setOrientation(orientation);
         this.mHeaderAndFooterRecyclerViewAdapter = mHeaderAndFooterRecyclerViewAdapter;
     }
 
@@ -114,9 +126,11 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
         if (isDividerShow(itemPosition)) {
             if (mOrientation == VERTICAL_LIST) {
-                outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+                mSpacing = (-1 != mSpacing) ? mSpacing : mDivider.getIntrinsicHeight();
+                outRect.set(0, 0, 0, mSpacing);
             } else {
-                outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+                mSpacing = (-1 != mSpacing) ? mSpacing : mDivider.getIntrinsicWidth();
+                outRect.set(0, 0, mSpacing, 0);
             }
         }
     }

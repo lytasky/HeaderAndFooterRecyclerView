@@ -95,7 +95,6 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         if (header == null) {
             throw new RuntimeException("header is null");
         }
-
         mHeaderViews.add(header);
         this.notifyDataSetChanged();
     }
