@@ -67,6 +67,7 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     /**
      * 设置adapter
+     *
      * @param adapter
      */
     public void setAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
@@ -114,24 +115,26 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             throw new RuntimeException("footer is null");
         }
 
-        mFooterViews.add(0,loadingFooter);
+        mFooterViews.add(0, loadingFooter);
         this.notifyDataSetChanged();
     }
 
     /**
      * 返回第一个FoView
+     *
      * @return
      */
     public List<View> getFooterView() {
-        return  getFooterViewsCount()>0 ? mFooterViews : null;
+        return getFooterViewsCount() > 0 ? mFooterViews : null;
     }
 
     /**
      * 返回第一个HeaderView
+     *
      * @return
      */
     public List<View> getHeaderView() {
-        return  getHeaderViewsCount()>0 ? mHeaderViews : null;
+        return getHeaderViewsCount() > 0 ? mHeaderViews : null;
     }
 
     public void removeHeaderView(View view) {
@@ -179,7 +182,7 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             mInnerAdapter.onBindViewHolder(holder, position - headerViewsCountCount);
         } else {
             ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-            if(layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+            if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
                 ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
             }
         }
@@ -199,7 +202,7 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         } else if (headerViewsCountCount <= position && position < headerViewsCountCount + innerCount) {
 
             int innerItemViewType = mInnerAdapter.getItemViewType(position - headerViewsCountCount);
-            if(innerItemViewType >= Integer.MAX_VALUE / 2) {
+            if (innerItemViewType >= Integer.MAX_VALUE / 2) {
                 throw new IllegalArgumentException("your adapter's return value of getViewTypeCount() must < Integer.MAX_VALUE / 2");
             }
             return innerItemViewType + Integer.MAX_VALUE / 2;

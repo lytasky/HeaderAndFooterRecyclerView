@@ -31,6 +31,8 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mSpacing = -1;
 
+    private int mSpanCount = 1;
+
     public DividerItemDecoration(Context context, int orientation, HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
@@ -49,12 +51,12 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         this.mHeaderAndFooterRecyclerViewAdapter = mHeaderAndFooterRecyclerViewAdapter;
     }
 
-    //为了避免与上面的构造方法重名 改变啦参数的位置  注意!!!
-    public DividerItemDecoration(Context context, HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter, int orientation, int spacing) {
+    public DividerItemDecoration(Context context, int orientation, int spacing, int spanCount, HeaderAndFooterRecyclerViewAdapter mHeaderAndFooterRecyclerViewAdapter) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
         mSpacing = spacing;
+        mSpanCount = spanCount;
         setOrientation(orientation);
         this.mHeaderAndFooterRecyclerViewAdapter = mHeaderAndFooterRecyclerViewAdapter;
     }
@@ -124,19 +126,36 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
-        if (isDividerShow(itemPosition)) {
-            if (mOrientation == VERTICAL_LIST) {
+        if (mOrientation == VERTICAL_LIST) {
+            if (isDividerShow(itemPosition)) {
                 mSpacing = (-1 != mSpacing) ? mSpacing : mDivider.getIntrinsicHeight();
                 outRect.set(0, 0, 0, mSpacing);
+            }
+        } else {
+            if (mSpanCount == 1) {
+                if (isDividerShow(itemPosition)) {
+                    mSpacing = (-1 != mSpacing) ? mSpacing : mDivider.getIntrinsicWidth();
+                    outRect.set(0, 0, mSpacing, 0);
+                }
             } else {
-                mSpacing = (-1 != mSpacing) ? mSpacing : mDivider.getIntrinsicWidth();
-                outRect.set(0, 0, mSpacing, 0);
+                if (isDividerHorizontalShow(itemPosition)) {
+                    mSpacing = (-1 != mSpacing) ? mSpacing : mDivider.getIntrinsicWidth();
+                    outRect.set(0, 0, mSpacing, 0);
+                }
             }
         }
     }
 
     public boolean isDividerShow(int index) {
         return !(mHeaderAndFooterRecyclerViewAdapter.isHeader(index) || mHeaderAndFooterRecyclerViewAdapter.isFooter(index));
+    }
+
+    public boolean isDividerHorizontalShow(int index) {
+        boolean isRight = false;
+        if (mSpanCount > 1) {
+            isRight = ((index + 1) % mSpanCount) == 0;
+        }
+        return !(mHeaderAndFooterRecyclerViewAdapter.isHeader(index) || mHeaderAndFooterRecyclerViewAdapter.isFooter(index) || isRight);
     }
 }
 
