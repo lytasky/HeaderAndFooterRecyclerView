@@ -128,12 +128,22 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
         if (isDividerShow(itemPosition)) {
             if (mOrientation == VERTICAL_LIST) {
-                int column = (itemPosition - mHeaderAndFooterRecyclerViewAdapter.getHeaderViewsCount()) % mSpanCount; // item column
-                outRect.left = column * mSpacing / mSpanCount; // column * ((1f / spanCount) * spacing)
-                outRect.right = mSpacing - (column + 1) * mSpacing / mSpanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (1 == mSpanCount) {
+                    mSpacing = (-1 != mSpacing) ? mSpacing : mDivider.getIntrinsicHeight();
+                    outRect.set(0, 0, 0, mSpacing);
+                } else {
+                    int column = (itemPosition - mHeaderAndFooterRecyclerViewAdapter.getHeaderViewsCount()) % mSpanCount; // item column
+                    outRect.left = column * mSpacing / mSpanCount; // column * ((1f / spanCount) * spacing)
+                    outRect.right = mSpacing - (column + 1) * mSpacing / mSpanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                }
             } else {
-                if (itemPosition - mHeaderAndFooterRecyclerViewAdapter.getHeaderViewsCount() >= mSpanCount) {
-                    outRect.top = mSpacing; // item top
+                if (1 == mSpanCount) {
+                    mSpacing = (-1 != mSpacing) ? mSpacing : mDivider.getIntrinsicWidth();
+                    outRect.set(0, 0, mSpacing, 0);
+                } else {
+                    if (itemPosition - mHeaderAndFooterRecyclerViewAdapter.getHeaderViewsCount() >= mSpanCount) {
+                        outRect.top = mSpacing; // item top
+                    }
                 }
             }
         }
