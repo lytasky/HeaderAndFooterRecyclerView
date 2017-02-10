@@ -168,10 +168,10 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         int headerViewsCountCount = getHeaderViewsCount();
         if (viewType < TYPE_HEADER_VIEW + headerViewsCountCount) {
             return new ViewHolder(mHeaderViews.get(viewType - TYPE_HEADER_VIEW));
-        } else if (viewType >= TYPE_FOOTER_VIEW && viewType < Integer.MAX_VALUE / 2) {
+        } else if (viewType >= TYPE_FOOTER_VIEW && viewType < getFooterViewsCount() + TYPE_FOOTER_VIEW) {
             return new ViewHolder(mFooterViews.get(viewType - TYPE_FOOTER_VIEW));
         } else {
-            return mInnerAdapter.onCreateViewHolder(parent, viewType - Integer.MAX_VALUE / 2);
+            return mInnerAdapter.onCreateViewHolder(parent, viewType);
         }
     }
 
@@ -202,10 +202,10 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         } else if (headerViewsCountCount <= position && position < headerViewsCountCount + innerCount) {
 
             int innerItemViewType = mInnerAdapter.getItemViewType(position - headerViewsCountCount);
-            if (innerItemViewType >= Integer.MAX_VALUE / 2) {
-                throw new IllegalArgumentException("your adapter's return value of getViewTypeCount() must < Integer.MAX_VALUE / 2");
-            }
-            return innerItemViewType + Integer.MAX_VALUE / 2;
+//            if (innerItemViewType >= Integer.MAX_VALUE / 2) {
+//                throw new IllegalArgumentException("your adapter's return value of getViewTypeCount() must < Integer.MAX_VALUE / 2");
+//            }
+            return innerItemViewType;
         } else {
             return TYPE_FOOTER_VIEW + position - headerViewsCountCount - innerCount;
         }
